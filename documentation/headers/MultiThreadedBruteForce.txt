@@ -1,0 +1,167 @@
+
+******************************************************        FUNCTIONS     **********************************************************
+
+***) char* trimLeft(char* arr,int l,int pointer)
+		
+		Description: Takes a character string arr and trims the spaces that are present to the left of the string.
+				   
+				   For example: let arr="....Shayak";
+				   		      then trimLeft(arr,10,6) will return "Shayak\0XXX" 
+				   		      
+				   		      Note that '\0' denotes the null character, XXX denote any garbage value that might be previously
+				   		      present 
+				   		      
+		Variables:
+		
+				   char* arr   : Pointer to a string of characters which needs to be trimmed
+				   
+				   int l       : Length of the string arr
+				   
+				   int pointer : It contains the position of the first valid character of the string. In the above example, 'S'  		
+				   			  is the first valid character
+
+***) void printArray(char* arr,int l)
+
+	     Description: Takes a character array and prints it on the screen (does not print a newline character at the end). It is a 
+	     		   function that has beeen created primarily for debugging purposes
+	     
+	     Variables:
+	     	
+	     		   char* arr   : The character array or string that is to be printed				   		      
+				   		      
+				   int l 	     : The length of the string 
+				   
+***) char* realign(char* buf,int l,int no_of_fields)
+
+		Description: Takes a string of characters and aligns them to the right half of the buffer they have been stored into
+		
+			        For Example: arr="Harshit..."
+			   				 then realign will make return a buffer which contains "...Harshit" 
+			   				 
+		Variables:
+				
+				   char* buf       : Pointer to the character buffer which has to be aligned to the right.
+				   
+				   int l  	    : Total length of the character buffer. In the above example, 10.
+				   
+				   int no_of_fields: The total number of characters the password consists of. In the above example, 7.
+				   
+
+***) int increment(char* arr,int l,int low,int high)
+		
+		Descripition: It is used to obtain the password next to the current password. It is to be noted that arr is modified to 
+				    get the next password, i.e the next password is generated and kept in arr only.
+				    It returns an integer value denoting the length of the new password.
+				    The next password is obtained as per the password list generated according to the following format :
+				    say that the character set for the generation of the passwords is A - E, then : 
+				    
+				    A  AA	BA
+				    B  AB BB
+				    C  AC BC
+				    D  AD BD
+				    E  AE BE ...
+				    
+				    For example if the password in arr is "REYANSH",considering the character set to be from A to Z,
+				    then the next password would be, "REYANSHI". And if it was "ZZZ" then it would be "AAAA".
+				    
+		Variables:    
+				
+				    char* arr: Pointer to the current password.
+				    
+				    int l    : Length of the current password stored in arr.
+				    
+				    int low  : Lower character of the character set
+				    
+				    int high : Upper character of the character set 
+
+
+***)	void gen(char* destination_buffer,int max_size,int starting_password_number,int ending_password_number,int low,int high)
+
+		Description: This is the function that shall be run on multiple threads to achieve higher efficiency.
+				   Generates all the passwords starting from the password at starting_password_number upto the password at 
+				   ending_password_number. The character set to be used for generating the passwords is defined by low and 
+				   high. 
+				   		   
+		Variables: 
+		
+				   char* destination_buffer     : This is the buffer in which the generated address is to be stored. The 
+				   					    	    contents of the destination_buffer can then be used in any way that we require.
+				   					    
+				   int max_size		       : the total size of the destination buffer. 
+				    
+				   int starting_password_number : It is used to predict the password from wich the password generation shall 
+				   						    begin.
+				   
+				   int ending_passwrod_number   : It is used to predict the password at which the password generation shall end
+				
+				   int low				  : Used to define the lower limit of the character set used in the brute force
+				   						    process
+				   						   
+				   int high				  : Used to define the higher limit of the character set used in the brute force.
+				   						    It is defined in a way such that (char)(high+1) == (char)low.
+				   						    
+				   						    
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   						    
+				   						    
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+				   
+			    
+			   		   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   
+				   			 
+			
+		

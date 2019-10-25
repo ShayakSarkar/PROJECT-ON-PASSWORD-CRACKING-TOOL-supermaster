@@ -1,0 +1,7 @@
+rule based attack
+length of the password -- minlength and maxlength and exact length (one character / 2 character may not be required so ask the cracker)
+social engineering 
+rainbow tables
+hash identifcation
+parallel engine
+Didier Stevens

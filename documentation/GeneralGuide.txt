@@ -1,0 +1,16 @@
+Following are the guidelines that define the standards maintained while making the project
+
+**************************************************         PROJECT SPECIFIC     *****************************************************
+
+***) Every folder name shall begin with a small letter and shall make use of camel case if needed for clarity
+
+***) Every file name shall begin with a Capital letter and shall follow camel case if needed
+
+**************************************************	    PROGRAM SPECIFIC     ******************************************************
+
+***)	Every fucntion name shall begin with a small letter and will follow Camel case if required
+
+***) Every variable name shall start with a small letter and shall make use of underscores if needed for clarity
+
+
+

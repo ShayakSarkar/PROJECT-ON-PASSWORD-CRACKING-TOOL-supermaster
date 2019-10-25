@@ -1,0 +1,33 @@
+.TH "CRACK" "" "" "" "Test Version"
+ 
+.SH NAME
+ 	CRACK
+
+.SH SYNOPSIS
+	Syntax: crack [--filetype] [filepath] [--method]
+
+.SH DESCRIPTION
+	This is an efficient password cracking tool that can be used for cracking passwords efficiently. It provides various approaches to do so including dicitonary attacks, rule based attacks and a fully customisable multithreaded brute force method
+
+.SH OPTIONS
+
+	filetype: --pdf: Specifies that the target file is password protected pdf
+
+			  --wd:  Specidies that the target file is a password protected word file
+
+			  --usracc: Specifies that the target is a password protected wuser account
+
+			  --eacc: Specifies the target is a password proteced email account
+
+			  --fbacc: target is a password protected facebokk account
+
+	filepath: Spcifies the location of the file which is to be cracked
+
+	method:   --mbf: Multithreaded brute force approach
+
+			  --method2: Method pending
+
+			  --method3: Method pending
+	
+		      --method4: Method pending
+		
