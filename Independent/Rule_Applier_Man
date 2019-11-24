@@ -1,0 +1,25 @@
+
+Every password transformation shall be done on the basis of a rule.
+
+Rules:
+	Character Transforms -- {CT}
+	String Transforms    -- {ST}
+	Special Transforms   -- {SpT}
+		
+	General Syntax:
+
+		For a Transform:
+			<Transform Type><target_char/target_string>=<new_string1,new string2,new string3...>
+			Ex: {CT}c=[,C,<;
+			    {ST}pass=&4$$,ls;
+			
+			The first rule will cause generation of all possible passwords with 'c' replaced by "[","C","<"
+			For example 
+				Main Password is "cat": 
+				Generated Passwords: "[at","Cat","<at"
+
+			Similaly Strings shall be replaced with the corresponding required strings
+ 
+	
+	
+

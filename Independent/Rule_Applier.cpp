@@ -1,0 +1,273 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <list>
+#include <stack>
+
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
+
+using namespace std;
+
+class Rule	//This stores the information regarding the rule
+{
+	public: 
+		string transform_type;	//stores the type of transform
+		string target;		//stores the string on which the transform is to be performed
+		vector<string>ls;		//stores the transforms 
+		Rule()
+		{
+			transform_type="";
+			target="";
+		}
+		void display()
+		{
+			cout<<"Transform Type: "<<transform_type<<endl;
+			cout<<"Target String: "<<target<<endl;
+			cout<<"Transform vector: "<<endl;
+			for(vector<string>::iterator it=ls.begin();it!=ls.end();it++)
+				cout<<*it<<endl;
+			cout<<"********"<<endl;
+		}
+			
+};		
+
+class Flipper	//Objects of this class create a state transition table on the basis of a rule supplied. Each time the flip method is called, the transition to the next state
+{	public:
+		vector<string> states;	//All possible states in the transition table
+		int no_of_states;	//Number of states in the tranition table
+		Rule rule;		//The rule object according to which the Flipper is made
+		int state_no;		//Identifies the current state 
+		int pos;		//Identifies the position of the flipper in the password
+		Flipper(Rule obj)
+		{
+			rule=obj;
+			no_of_states=0;
+			state_no=0;
+			createTransitionTable();
+			pos=0;
+		}
+		string getState()
+		{
+			return states[state_no];
+		}
+		void createTransitionTable()
+		{
+			no_of_states=rule.ls.size()+1;
+			states.push_back(rule.target);
+			for(int i=0;i<rule.ls.size();i++)
+				states.push_back(rule.ls[i]);
+		}
+		string flip()
+		{
+			state_no++;
+			if(state_no==no_of_states)
+				state_no=0;
+			return states[state_no];
+		}
+		void display()
+		{
+			cout<<"Number of states of the flipper: "<<no_of_states<<endl;
+			for(int i=0;i<no_of_states;i++)
+				cout<<flip()<<" ";
+		
+			cout<<endl<<endl;
+
+		}
+};
+
+int hashing(string str)
+{
+	int ans=0;
+	for(int i=0;i<str.length();i++)
+		ans+=str.at(i);
+	return ans;
+}
+
+unordered_map<int,Flipper*> generateFlipperMap(string password,vector<Rule> rules)
+{
+	unordered_map<int,Flipper*> flipper_map;
+	vector<int> pat_hashes;		//Stores hashes of all the targets in the rules vector
+        vector<int> pass_hashes;	//Stores hashes of substrings in password of length equal to targets of rules in rules vector
+
+	for(int i=0;i<rules.size();i++)
+	{	pat_hashes.push_back(hashing(rules[i].target));
+		pass_hashes.push_back(hashing(password.substr(0,rules[i].target.length())));
+	}
+	for(int i=0;i<password.length();i++)
+	{	
+		for(int j=0;j<rules.size();j++)
+		{	if(password.length()>=rules[j].target.length()+i && pat_hashes[j]==pass_hashes[j])
+			{
+				if(password.substr(i,rules[j].target.length()).compare(rules[j].target)==0)
+				{	Flipper* flp=new Flipper(rules[j]);
+					flipper_map.insert({i,flp});
+					break;
+				}
+			}
+		}
+		for(int j=0;j<rules.size();j++)
+		{
+			if(i+rules[j].target.length()>=password.length())
+				break;
+			pass_hashes[j]-=password.at(i);
+			pass_hashes[j]+=password.at(i+rules[j].target.length());
+		}
+	}
+	return flipper_map;
+}
+
+void generate(string password,string pattern,vector<Rule> rules)
+{
+	vector<int> indices;
+	if(rules[0].transform_type.compare("SpT"))
+	{
+		cout<<"This is a special transform"<<endl;
+		return;
+	}
+}
+
+Rule generateRuleObjectFromRule(string rule)
+{
+	Rule obj;
+	vector<string> ls;			//Stores the transformations for the target_char
+	string transform_type="",target_string="";
+	
+	int i=0;
+	for(;rule.at(i)!='}';i++)
+		if(rule.at(i)!='{')
+			transform_type+=rule.at(i);
+	obj.transform_type=transform_type;
+	i++;
+	for(;rule.at(i)!='=';i++)
+		target_string+=rule.at(i);
+	obj.target=target_string;
+	i++;
+
+	for(;i<rule.length();i++)
+	{
+		string temp="";
+		while(rule.at(i)!=',' && rule.at(i)!=';')
+		{	
+			temp+=rule.at(i);
+			i++;
+		}
+		ls.push_back(temp);
+	}
+	obj.ls=ls;
+	return(obj);
+}
+
+void incrementFlippers(vector<unordered_map<int,Flipper*>::iterator>* flipper_container)
+{
+	int i=flipper_container->size()-1;
+	while(i>=0 && (flipper_container->at(i)->second)->state_no==(flipper_container->at(i)->second)->no_of_states-1)
+	{	(flipper_container->at(i)->second)->flip();
+		i--;
+	}
+	if(i<0)
+		return;
+	(flipper_container->at(i)->second)->flip();
+}
+		
+vector<string> applyRules(string pass,vector<Rule> rules)
+{
+	vector<string> generated_passwords;
+	unordered_map<int,Flipper*> flipper_map=generateFlipperMap(pass,rules);
+	vector<unordered_map<int,Flipper*>::iterator> flipper_container;	//Contains an iterator of a map object which is a pair*
+	
+	int no_of_passwords=1;
+	
+	for(unordered_map<int,Flipper*>::iterator it=flipper_map.begin();it!=flipper_map.end();it++)
+		no_of_passwords*=(it->second)->no_of_states;
+	
+	for(unordered_map<int,Flipper*>::iterator it=flipper_map.begin();it!=flipper_map.end();it++)
+		flipper_container.push_back(it);
+	
+	for(int i=0;i<no_of_passwords;i++)
+	{
+		string gen_pass="";	//Password generated by applying the rules
+		for(int j=0;j<pass.length();j++)
+		{
+			if(flipper_map.find(j)==flipper_map.end())
+			{
+				gen_pass+=pass.at(j);
+				continue;
+			}
+			gen_pass+=flipper_map[j]->getState();
+		}
+		//cout<<"Password Permutation: "<<gen_pass<<endl;
+		generated_passwords.push_back(gen_pass);
+		incrementFlippers(&flipper_container);
+	}
+	return generated_passwords;
+}
+
+vector<string> readRules(FILE* rulebook)
+{
+	vector<string> rule_strings;
+	string ans="";
+	while(true)
+	{	char c='\0';
+		int bytes_read=fread(&c,1,1,rulebook);
+		if(bytes_read==0)
+			break;
+		if(c=='\n')
+			continue;
+		ans+=c;
+		if(c==';')
+		{
+			rule_strings.push_back(ans);
+			ans="";
+			continue;
+		}
+	}
+	cout<<endl;
+	//cout<<"The contents of the rules vector are"<<endl;
+	//for(vector<string>::iterator it=rule_strings.begin();it!=rule_strings.end();it++)
+	//	cout<<*it<<" ";
+        cout<<endl;
+	cout<<endl;	
+	return rule_strings;
+}
+
+vector<string> RuleApplier(string password)
+{
+	static bool is_read=false;
+	static vector<Rule>rule_objects;
+	vector<string> generated_passwords;
+	if(is_read)
+	{
+		generated_passwords=applyRules(password,rule_objects);
+		return generated_passwords;
+	}
+	int fd=open("/home/shayak/Desktop/PROJECT-ON-PASSWORD-CRACKING-TOOL-supermaster/PROJECT-ON-PASSWORD-CRACKING-TOOL-master/data/RuleBook",0);
+	//cout<<"file des: "<<fd<<endl;
+	FILE* rulebook=fdopen(fd,"r");
+	vector<string>rule_strings=readRules(rulebook);
+	for(int i=0;i<rule_strings.size();i++)
+		rule_objects.push_back(generateRuleObjectFromRule(rule_strings[i]));
+	generated_passwords=applyRules(password,rule_objects);
+	is_read=true;
+	return generated_passwords;	//Remaining lines are only meant for debugging and testing.
+}
+/*
+int main()
+{
+	string s;
+	vector<string> generated_passwords;
+	cout<<"Enter the password ";
+	cin>>s;
+	cout<<"echo2"<<endl;
+	generated_passwords=RuleApplier(s);
+	cout<<"Enter the password ";
+	cin>>s;
+	generated_passwords=RuleApplier(s);
+	cout<<"echo1"<<endl;
+	for(auto it=generated_passwords.begin();it!=generated_passwords.end();it++)
+		cout<<*it<<" ";
+	cout<<endl;
+}
+*/
+
