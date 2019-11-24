@@ -15,8 +15,9 @@ using namespace std;
 
 char* trimLeft(char* arr,int l,int pointer)
 {
-	static char *temp;
-	free(temp);
+	static char *temp=NULL;
+	if(temp!=NULL)
+		free(temp);
 	char* string=(char*)malloc((pointer+1)*sizeof(char));
 	temp=string;
 	string=&arr[l-pointer];
@@ -52,7 +53,7 @@ char* realign(char* buf,int l,int no_of_fields)	//Realigns the buf towards the r
 	for(int i=0;i<l;i++)
 		temp[(l-no_of_fields+i)%l]=buf[i];
 	temp[l]='\0';
-	buf=temp;	
+	buf=temp;
 	return buf;
 }				
 string hashLib(char* destination_buffer,int hash_type)
@@ -155,24 +156,27 @@ void multiThread()
 	int hash_type,low,high;
 	cout<<"Enter the hashed password whose plaintext is to be found"<<endl;
 	cin>>target_hashed_password;
-	cout<<"Enter the number of passwords: ";
+	cout<<"Enter the number of passwords(Remember that smaller the set, the faster the search): ";
 	cin>>no;
 	cout<<"Enter the lower limit of charset: ";
 	cin>>low;
 	cout<<"Enter the higher limit of the charset: ";
 	cin>>high;
-	cout<<"Enter the type of hashing: "<<endl<<"1) MD5\n2) SHA3 \n3)SHA1 \n4)SHA256\nEnter your choice: ";
+	cout<<"Enter the type of hashing: "<<endl<<"1) MD5\n2) SHA1 \n3)SHA3 \n4)SHA256\nEnter your choice: ";
 	cin>>hash_type;	
 	long int interval=(no-0)/4;
+
+	cout<<"Processing..."<<endl;
 	thread th1(gen,buf1,10,1,1+interval,low,high,target_hashed_password,hash_type);
 	thread th2(gen,buf2,10,1+interval,1+2*interval,low,high,target_hashed_password,hash_type);
 	thread th3(gen,buf3,10,1+2*interval,1+3*interval,low,high,target_hashed_password,hash_type);
 	thread th4(gen,buf4,10,1+3*interval,1+4*interval,low,high,target_hashed_password,hash_type);
 	th1.join();th2.join();th3.join();th4.join();
+	free(target_hashed_password);
 }
-
+/*
 int main()
 {
 	multiThread();
 	return 0;
-}
+}*/

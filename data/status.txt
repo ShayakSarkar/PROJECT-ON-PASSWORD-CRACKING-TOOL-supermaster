@@ -1,0 +1,11 @@
+DONE
+
+1) Brute Force
+2) Plain Dictionary Attack
+
+NOT DONE
+
+1) Enhanced Dictionary
+2) Testing with actual hash files for the normal dictionary attack
+3) Final Main funtion
+

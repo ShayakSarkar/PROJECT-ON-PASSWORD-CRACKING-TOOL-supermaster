@@ -242,7 +242,7 @@ vector<string> RuleApplier(string password)
 		generated_passwords=applyRules(password,rule_objects);
 		return generated_passwords;
 	}
-	int fd=open("/home/shayaksarkar/Desktop/PROJECT-ON-PASSWORD-CRACKING-TOOL-supermaster/PROJECT-ON-PASSWORD-CRACKING-TOOL-master/data/RuleBook",0);
+	int fd=open("/home/shayak/Desktop/PROJECT-ON-PASSWORD-CRACKING-TOOL-supermaster/PROJECT-ON-PASSWORD-CRACKING-TOOL-master/data/RuleBook",0);
 	//cout<<"file des: "<<fd<<endl;
 	FILE* rulebook=fdopen(fd,"r");
 	vector<string>rule_strings=readRules(rulebook);
@@ -259,11 +259,15 @@ int main()
 	vector<string> generated_passwords;
 	cout<<"Enter the password ";
 	cin>>s;
+	cout<<"echo2"<<endl;
 	generated_passwords=RuleApplier(s);
+	cout<<"Enter the password ";
+	cin>>s;
+	generated_passwords=RuleApplier(s);
+	cout<<"echo1"<<endl;
 	for(auto it=generated_passwords.begin();it!=generated_passwords.end();it++)
 		cout<<*it<<" ";
 	cout<<endl;
 }
 */
-
 
